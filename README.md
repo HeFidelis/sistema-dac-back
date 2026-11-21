@@ -26,12 +26,20 @@ Em desenvolvimento, a API cria o banco, aplica a migration e insere dados de dem
 
 Senha dos dois: `Ampara@2026` (só no ambiente de desenvolvimento, em `appsettings.Development.json`).
 
-| E-mail | Papel | Pode |
-|---|---|---|
-| `admin@ampara.local` | Admin | cadastrar animais, decidir adoções, ver o painel |
-| `adotante@ampara.local` | Adopter | pedir adoção e acompanhar as próprias solicitações |
+| E-mail | Papel |
+|---|---|
+| `admin@ampara.local` | SuperAdmin (responsável pela ONG) |
+| `adotante@ampara.local` | Adopter |
 
-Novos adotantes se cadastram em `POST /api/auth/register`.
+### Papéis
+
+| Papel | Quem é | Pode |
+|---|---|---|
+| **SuperAdmin** | o responsável pela ONG, criado pelo seed (só existe um) | tudo o que o Admin faz e gerenciar a equipe |
+| **Admin** | alguém que o SuperAdmin promoveu | cadastrar animais, aprovar ou recusar adoções e ver o painel |
+| **Adopter** | qualquer pessoa que se cadastra | pedir adoção e acompanhar as próprias solicitações |
+
+Todo cadastro novo (`POST /api/auth/register`) entra como adotante. Só o SuperAdmin promove alguém a Admin ou o devolve a adotante. Ninguém vira SuperAdmin por essa via, e o papel do SuperAdmin não pode ser alterado.
 
 ## Banco de dados
 
@@ -46,7 +54,7 @@ erDiagram
         string FullName
         string Email UK
         string Phone
-        string Role "Admin | Adopter"
+        string Role "SuperAdmin | Admin | Adopter"
         string PasswordHash
     }
     Animals {
@@ -106,11 +114,12 @@ Todas as rotas começam em `/api`. Enums trafegam como texto e os erros seguem o
 |---|---|---|
 | Autenticação | `POST auth/register` · `POST auth/login` · `GET auth/me` | público · logado |
 | Catálogo público | `GET public/animals?species` · `GET public/animals/{id}` | qualquer pessoa |
-| Animais | `GET animals?search&species&status&page&pageSize` · `GET animals/{id}` · `POST animals` · `PUT animals/{id}` · `POST animals/{id}/photo` (multipart `file`, JPG/PNG até 5 MB) | admin |
+| Animais | `GET animals?search&species&status&page&pageSize` · `GET animals/{id}` · `POST animals` · `PUT animals/{id}` · `POST animals/{id}/photo` (multipart `file`, JPG/PNG até 5 MB) | equipe (Admin e SuperAdmin) |
 | Adoções | `POST adoptions` · `GET adoptions/mine` | adotante |
-| | `GET adoptions?status&page&pageSize` · `POST adoptions/{id}/approve` · `POST adoptions/{id}/reject` | admin |
-| | `GET adoptions/{id}` | admin ou o adotante dono |
-| Painel | `GET dashboard` | admin |
+| | `GET adoptions?status&page&pageSize` · `POST adoptions/{id}/approve` · `POST adoptions/{id}/reject` | equipe |
+| | `GET adoptions/{id}` | equipe ou o adotante dono |
+| Painel | `GET dashboard` | equipe |
+| Equipe | `GET users?search&page&pageSize` · `PUT users/{id}/role` (`{ "role": "Admin" }` ou `"Adopter"`) | SuperAdmin |
 
 O login devolve um `accessToken` (JWT válido por 8 horas). Envie-o em `Authorization: Bearer <token>`.
 
@@ -134,10 +143,10 @@ flowchart LR
 dotnet test
 ```
 
-São 56 testes unitários em `tests/Ampara.UnitTests`, que não precisam de banco:
+São 64 testes unitários em `tests/Ampara.UnitTests`, que não precisam de banco:
 
 - regras de domínio (animal, adoção, usuário);
-- casos de uso (autenticação, animais, adoções, painel);
+- casos de uso (autenticação, animais, adoções, painel, equipe);
 - JWT e hash de senha;
 - tratamento de erros.
 
