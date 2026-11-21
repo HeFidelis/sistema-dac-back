@@ -2,10 +2,16 @@ using Ampara.Domain.Common;
 
 namespace Ampara.Domain.Users;
 
+/// <summary>
+/// SuperAdmin: the NGO owner (only one, from the seed), who also manages the team.
+/// Admin: promoted by the SuperAdmin; runs animals, adoptions and the dashboard.
+/// Adopter: anyone who signs up.
+/// </summary>
 public enum UserRole
 {
     Admin,
     Adopter,
+    SuperAdmin,
 }
 
 public class User : Entity
@@ -37,5 +43,17 @@ public class User : Entity
             PasswordHash = passwordHash,
             CreatedAt = now,
         };
+    }
+
+    /// <summary>Promotes an adopter to the team (Admin) or moves an Admin back to adopter.</summary>
+    public void ChangeRole(UserRole role)
+    {
+        if (role == UserRole.SuperAdmin)
+            throw new DomainException("Não é possível promover alguém a super admin.");
+
+        if (Role == UserRole.SuperAdmin)
+            throw new DomainException("O papel do super admin não pode ser alterado.");
+
+        Role = role;
     }
 }

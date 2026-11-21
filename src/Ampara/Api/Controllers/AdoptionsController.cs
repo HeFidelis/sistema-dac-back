@@ -24,7 +24,7 @@ public class AdoptionsController(AdoptionService adoptions) : ControllerBase
     public Task<IReadOnlyList<AdoptionResponse>> Mine(CancellationToken cancellationToken) => adoptions.ListMineAsync(cancellationToken);
 
     [HttpGet]
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Staff)]
     public Task<PagedResult<AdoptionResponse>> List([FromQuery] AdoptionListQuery query, CancellationToken cancellationToken) =>
         adoptions.ListAsync(query, cancellationToken);
 
@@ -33,11 +33,11 @@ public class AdoptionsController(AdoptionService adoptions) : ControllerBase
     public Task<AdoptionResponse> Get(Guid id, CancellationToken cancellationToken) => adoptions.GetAsync(id, cancellationToken);
 
     [HttpPost("{id:guid}/approve")]
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Staff)]
     public Task<AdoptionResponse> Approve(Guid id, CancellationToken cancellationToken) => adoptions.ApproveAsync(id, cancellationToken);
 
     [HttpPost("{id:guid}/reject")]
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Staff)]
     public Task<AdoptionResponse> Reject(Guid id, RejectAdoptionRequest request, CancellationToken cancellationToken) =>
         adoptions.RejectAsync(id, request, cancellationToken);
 }

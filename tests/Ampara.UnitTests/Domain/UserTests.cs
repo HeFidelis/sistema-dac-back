@@ -29,4 +29,33 @@ public class UserTests
     {
         Assert.Throws<DomainException>(() => User.Register("", "ana@exemplo.com", null, UserRole.Adopter, "hash", Now));
     }
+
+    [Fact]
+    public void ChangeRole_PromotesAdopterAndDemotesBack()
+    {
+        var user = NewAdopter();
+
+        user.ChangeRole(UserRole.Admin);
+        Assert.Equal(UserRole.Admin, user.Role);
+
+        user.ChangeRole(UserRole.Adopter);
+        Assert.Equal(UserRole.Adopter, user.Role);
+    }
+
+    [Fact]
+    public void ChangeRole_ToSuperAdmin_Throws()
+    {
+        var error = Assert.Throws<DomainException>(() => NewAdopter().ChangeRole(UserRole.SuperAdmin));
+
+        Assert.Equal("Não é possível promover alguém a super admin.", error.Message);
+    }
+
+    [Fact]
+    public void ChangeRole_OfTheSuperAdmin_Throws()
+    {
+        var owner = User.Register("Mariana Costa", "admin@ampara.local", null, UserRole.SuperAdmin, "hash", Now);
+
+        Assert.Throws<DomainException>(() => owner.ChangeRole(UserRole.Adopter));
+        Assert.Equal(UserRole.SuperAdmin, owner.Role);
+    }
 }

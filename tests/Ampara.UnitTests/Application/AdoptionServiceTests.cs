@@ -92,11 +92,13 @@ public class AdoptionServiceTests
         await Assert.ThrowsAsync<NotFoundException>(() => _service.GetAsync(request.Id));
     }
 
-    [Fact]
-    public async Task GetAsync_ByAdmin_ReturnsAnyRequest()
+    [Theory]
+    [InlineData(UserRole.Admin)]
+    [InlineData(UserRole.SuperAdmin)]
+    public async Task GetAsync_ByTheTeam_ReturnsAnyRequest(UserRole role)
     {
         var request = Existing();
-        LogInAs(Guid.NewGuid(), UserRole.Admin);
+        LogInAs(Guid.NewGuid(), role);
 
         var response = await _service.GetAsync(request.Id);
 

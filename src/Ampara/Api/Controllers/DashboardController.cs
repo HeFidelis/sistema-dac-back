@@ -7,7 +7,7 @@ namespace Ampara.Api.Controllers;
 
 [ApiController]
 [Route("api/dashboard")]
-[Authorize(Roles = Roles.Admin)]
+[Authorize(Roles = Roles.Staff)]
 public class DashboardController(DashboardService dashboard) : ControllerBase
 {
     [HttpGet]

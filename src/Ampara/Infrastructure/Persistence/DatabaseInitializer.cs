@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Ampara.Infrastructure.Persistence;
 
 /// <summary>
-/// Development only: applies the migrations and inserts demo data (2 users, 7 animals, 4 adoption requests),
-/// so the dashboard already has something to show.
+/// Development only: applies the migrations and inserts demo data (the SuperAdmin, an adopter, 7 animals and
+/// 4 adoption requests), so the dashboard already has something to show.
 /// </summary>
 public static class DatabaseInitializer
 {
@@ -45,7 +45,7 @@ public static class DatabaseInitializer
     private static async Task SeedAsync(AppDbContext db, IPasswordHasher hasher, string password, DateTimeOffset now)
     {
         var hash = hasher.Hash(password);
-        var admin = User.Register("Mariana Costa", "admin@ampara.local", null, UserRole.Admin, hash, now.AddDays(-150));
+        var admin = User.Register("Mariana Costa", "admin@ampara.local", null, UserRole.SuperAdmin, hash, now.AddDays(-150));
         var adopter = User.Register("Ana Souza", "adotante@ampara.local", "(11) 99999-0123", UserRole.Adopter, hash, now.AddDays(-150));
         db.Users.AddRange(admin, adopter);
 

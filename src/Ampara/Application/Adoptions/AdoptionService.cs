@@ -94,7 +94,7 @@ public class AdoptionService(
     {
         var adoption = await FindAsync(id, cancellationToken);
 
-        if (!currentUser.IsAdmin() && adoption.AdopterId != currentUser.UserId)
+        if (!currentUser.IsStaff() && adoption.AdopterId != currentUser.UserId)
             throw new NotFoundException("Solicitação não encontrada.");
 
         return AdoptionResponse.From(adoption);

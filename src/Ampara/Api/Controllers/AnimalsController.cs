@@ -8,7 +8,7 @@ namespace Ampara.Api.Controllers;
 /// <summary>Animal registry, used by the NGO team.</summary>
 [ApiController]
 [Route("api/animals")]
-[Authorize(Roles = Roles.Admin)]
+[Authorize(Roles = Roles.Staff)]
 public class AnimalsController(AnimalService animals) : ControllerBase
 {
     [HttpGet]

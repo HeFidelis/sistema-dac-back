@@ -14,7 +14,8 @@ public static class CurrentUserExtensions
     public static Guid RequireUserId(this ICurrentUser user) =>
         user.UserId ?? throw new UnauthorizedException("Faça login para continuar.");
 
-    public static bool IsAdmin(this ICurrentUser user) => user.Role == UserRole.Admin;
+    /// <summary>Admin or SuperAdmin.</summary>
+    public static bool IsStaff(this ICurrentUser user) => user.Role is UserRole.Admin or UserRole.SuperAdmin;
 }
 
 public interface IPasswordHasher
