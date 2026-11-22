@@ -156,9 +156,9 @@ Projeto único em camadas (Clean Architecture + DDD simplificado). As dependênc
 
 ```
 src/Ampara/
-├── Domain/           # entidades e regras: User, Animal, AdoptionRequest
+├── Domain/           # entidades e regras (User, Animal, AdoptionRequest), contratos dos repositórios e Enums/
 ├── Application/      # casos de uso (services) e contratos (DTOs) por feature
-├── Infrastructure/   # EF Core/PostgreSQL, migration, seed, JWT, hash de senha, fotos
+├── Infrastructure/   # EF Core/PostgreSQL (repositórios, migration, seed), JWT, hash de senha, fotos
 ├── Api/              # controllers, tratamento de erros, usuário atual
 └── Program.cs
 tests/Ampara.UnitTests/
@@ -168,4 +168,5 @@ tests/Ampara.UnitTests/
 
 - Commits no padrão [Conventional Commits](https://www.conventionalcommits.org/), em inglês e sem escopo: `feat: add animal registration`.
 - Código (identificadores, rotas, arquivos) em inglês; mensagens exibidas ao usuário em pt-BR.
+- Enums em `Domain/Enums/`, um por arquivo e com o sufixo `Enum` (`AnimalStatusEnum`). Os valores trafegam e são gravados como texto (`"Available"`).
 - Fotos enviadas ficam em `src/Ampara/uploads/` (fora do git).
