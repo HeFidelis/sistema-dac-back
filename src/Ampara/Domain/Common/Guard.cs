@@ -2,9 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace Ampara.Domain.Common;
 
-/// <summary>
-/// Small validation helpers shared by the entities. Messages are user-facing (pt-BR).
-/// </summary>
+// Small validation helpers shared by the entities. Messages are user-facing (pt-BR).
 public static partial class Guard
 {
     public static string Required(string? value, string fieldLabel, int maxLength)

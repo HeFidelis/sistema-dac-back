@@ -2,7 +2,7 @@ namespace Ampara.Domain.Adoptions;
 
 public interface IAdoptionRequestRepository
 {
-    /// <summary>Loads the request with its animal and adopter.</summary>
+    // Loads the request with its animal and adopter.
     Task<AdoptionRequest?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<(IReadOnlyList<AdoptionRequest> Items, int TotalCount)> ListAsync(AdoptionStatus? status, int page, int pageSize, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<AdoptionRequest>> ListByAdopterAsync(Guid adopterId, CancellationToken cancellationToken = default);

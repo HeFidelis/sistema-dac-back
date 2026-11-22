@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ampara.Api;
 
-/// <summary>
-/// Turns known exceptions into RFC 7807 ProblemDetails responses.
-/// Unknown exceptions become a generic 500 without leaking details.
-/// </summary>
+// Turns known exceptions into RFC 7807 ProblemDetails responses.
+// Unknown exceptions become a generic 500 without leaking details.
 public class GlobalExceptionHandler(IProblemDetailsService problemDetailsService, ILogger<GlobalExceptionHandler> logger)
     : IExceptionHandler
 {

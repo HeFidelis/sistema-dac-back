@@ -6,7 +6,7 @@ namespace Ampara.Domain.Adoptions;
 
 public enum AdoptionStatus { Pending, Approved, Rejected }
 
-/// <summary>What the adopter tells the NGO in the adoption form.</summary>
+// What the adopter tells the NGO in the adoption form.
 public sealed record ApplicantDetails(string Phone, string Housing, string Routine, string? Message);
 
 public class AdoptionRequest : Entity
@@ -53,7 +53,7 @@ public class AdoptionRequest : Entity
         };
     }
 
-    /// <summary>Approves the request and marks the animal as adopted.</summary>
+    // Approves the request and marks the animal as adopted.
     public void Approve(DateTimeOffset now)
     {
         EnsurePending();

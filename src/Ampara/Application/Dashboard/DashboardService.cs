@@ -13,7 +13,7 @@ public sealed record DashboardResponse(
     int PendingRequests,
     IReadOnlyList<MonthlyPoint> LastSixMonths);
 
-/// <summary>The indicators the NGO follows: animals by situation and intakes vs. adoptions per month.</summary>
+// The indicators the NGO follows: animals by situation and intakes vs. adoptions per month.
 public class DashboardService(IAnimalRepository animals, IAdoptionRequestRepository requests, TimeProvider clock)
 {
     public const int Months = 6;

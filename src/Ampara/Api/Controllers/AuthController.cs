@@ -8,7 +8,7 @@ namespace Ampara.Api.Controllers;
 [Route("api/auth")]
 public class AuthController(AuthService auth) : ControllerBase
 {
-    /// <summary>Creates an adopter account and logs in.</summary>
+    // Creates an adopter account and logs in.
     [HttpPost("register")]
     public Task<AuthResponse> Register(RegisterRequest request, CancellationToken cancellationToken) =>
         auth.RegisterAsync(request, cancellationToken);

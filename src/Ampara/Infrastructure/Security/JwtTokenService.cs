@@ -16,7 +16,7 @@ public class JwtOptions
     public string Issuer { get; set; } = string.Empty;
     public string Audience { get; set; } = string.Empty;
 
-    /// <summary>HMAC signing key. Never committed: set it with dotnet user-secrets.</summary>
+    // HMAC signing key. Never committed: set it with dotnet user-secrets.
     public string Key { get; set; } = string.Empty;
 
     public int ExpirationHours { get; set; } = 8;
@@ -24,7 +24,7 @@ public class JwtOptions
     public SymmetricSecurityKey GetSigningKey() => new(Encoding.UTF8.GetBytes(Key));
 }
 
-/// <summary>Claim names written in the token and read back by the API's CurrentUser.</summary>
+// Claim names written in the token and read back by the API's CurrentUser.
 public static class JwtClaims
 {
     public const string Subject = "sub";

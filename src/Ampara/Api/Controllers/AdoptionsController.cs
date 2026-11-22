@@ -18,7 +18,7 @@ public class AdoptionsController(AdoptionService adoptions) : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
 
-    /// <summary>The logged adopter's requests.</summary>
+    // The logged adopter's requests.
     [HttpGet("mine")]
     [Authorize(Roles = Roles.Adopter)]
     public Task<IReadOnlyList<AdoptionResponse>> Mine(CancellationToken cancellationToken) => adoptions.ListMineAsync(cancellationToken);
@@ -28,7 +28,7 @@ public class AdoptionsController(AdoptionService adoptions) : ControllerBase
     public Task<PagedResult<AdoptionResponse>> List([FromQuery] AdoptionListQuery query, CancellationToken cancellationToken) =>
         adoptions.ListAsync(query, cancellationToken);
 
-    /// <summary>The NGO opens any request; an adopter only their own.</summary>
+    // The NGO opens any request; an adopter only their own.
     [HttpGet("{id:guid}")]
     public Task<AdoptionResponse> Get(Guid id, CancellationToken cancellationToken) => adoptions.GetAsync(id, cancellationToken);
 

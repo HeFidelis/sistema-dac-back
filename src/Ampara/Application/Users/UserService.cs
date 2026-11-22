@@ -17,7 +17,7 @@ public sealed record ChangeRoleRequest
     public UserRole Role { get; init; }
 }
 
-/// <summary>The SuperAdmin's "Equipe" tab: finds people and promotes or demotes them.</summary>
+// The SuperAdmin's "Equipe" tab: finds people and promotes or demotes them.
 public class UserService(IUserRepository users, IUnitOfWork unitOfWork)
 {
     public async Task<PagedResult<UserResponse>> ListAsync(UserListQuery query, CancellationToken cancellationToken = default)

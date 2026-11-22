@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ampara.Api.Controllers;
 
-/// <summary>Team management ("Equipe" tab): only the SuperAdmin promotes or demotes people.</summary>
+// Team management ("Equipe" tab): only the SuperAdmin promotes or demotes people.
 [ApiController]
 [Route("api/users")]
 [Authorize(Roles = Roles.SuperAdmin)]

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Ampara.Infrastructure.Security;
 
-/// <summary>PBKDF2 hashing from ASP.NET Core (the same algorithm Identity uses), without Identity's tables.</summary>
+// PBKDF2 hashing from ASP.NET Core (the same algorithm Identity uses), without Identity's tables.
 public class PasswordHasher : IPasswordHasher
 {
     private readonly PasswordHasher<User> _hasher = new();

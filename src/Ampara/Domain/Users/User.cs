@@ -2,11 +2,9 @@ using Ampara.Domain.Common;
 
 namespace Ampara.Domain.Users;
 
-/// <summary>
-/// SuperAdmin: the NGO owner (only one, from the seed), who also manages the team.
-/// Admin: promoted by the SuperAdmin; runs animals, adoptions and the dashboard.
-/// Adopter: anyone who signs up.
-/// </summary>
+// SuperAdmin: the NGO owner (only one, from the seed), who also manages the team.
+// Admin: promoted by the SuperAdmin; runs animals, adoptions and the dashboard.
+// Adopter: anyone who signs up.
 public enum UserRole
 {
     Admin,
@@ -29,7 +27,7 @@ public class User : Entity
 
     private User() { }
 
-    /// <param name="passwordHash">Already hashed; the plain password never reaches the domain.</param>
+    // passwordHash: Already hashed; the plain password never reaches the domain.
     public static User Register(string fullName, string email, string? phone, UserRole role, string passwordHash, DateTimeOffset now)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash);
@@ -45,7 +43,7 @@ public class User : Entity
         };
     }
 
-    /// <summary>Promotes an adopter to the team (Admin) or moves an Admin back to adopter.</summary>
+    // Promotes an adopter to the team (Admin) or moves an Admin back to adopter.
     public void ChangeRole(UserRole role)
     {
         if (role == UserRole.SuperAdmin)

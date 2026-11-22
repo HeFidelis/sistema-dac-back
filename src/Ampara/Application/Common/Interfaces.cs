@@ -2,7 +2,7 @@ using Ampara.Domain.Users;
 
 namespace Ampara.Application.Common;
 
-/// <summary>Who is calling the API, read from the JWT.</summary>
+// Who is calling the API, read from the JWT.
 public interface ICurrentUser
 {
     Guid? UserId { get; }
@@ -14,7 +14,7 @@ public static class CurrentUserExtensions
     public static Guid RequireUserId(this ICurrentUser user) =>
         user.UserId ?? throw new UnauthorizedException("Faça login para continuar.");
 
-    /// <summary>Admin or SuperAdmin.</summary>
+    // Admin or SuperAdmin.
     public static bool IsStaff(this ICurrentUser user) => user.Role is UserRole.Admin or UserRole.SuperAdmin;
 }
 
@@ -33,7 +33,7 @@ public interface ITokenService
 
 public interface IFileStorage
 {
-    /// <returns>Public relative URL of the stored file, e.g. /uploads/animals/abc.jpg.</returns>
+    // Returns the public relative URL of the stored file, e.g. /uploads/animals/abc.jpg.
     Task<string> SaveAsync(Stream content, string folder, string fileName, CancellationToken cancellationToken = default);
 
     Task DeleteAsync(string url, CancellationToken cancellationToken = default);

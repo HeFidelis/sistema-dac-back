@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ampara.Infrastructure.Persistence;
 
-/// <summary>
-/// Development only: applies the migrations and inserts demo data (the SuperAdmin, an adopter, 7 animals and
-/// 4 adoption requests), so the dashboard already has something to show.
-/// </summary>
+// Development only: applies the migrations and inserts demo data (the SuperAdmin, an adopter, 7 animals and
+// 4 adoption requests), so the dashboard already has something to show.
 public static class DatabaseInitializer
 {
     public static async Task InitializeAsync(IServiceProvider services)

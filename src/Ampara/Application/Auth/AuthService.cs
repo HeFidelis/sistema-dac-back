@@ -26,7 +26,7 @@ public sealed record UserResponse(Guid Id, string FullName, string Email, string
 
 public sealed record AuthResponse(string AccessToken, DateTimeOffset ExpiresAt, UserResponse User);
 
-/// <summary>Sign-up (adopters only; the admin comes from the seed) and login with JWT.</summary>
+// Sign-up (adopters only; the admin comes from the seed) and login with JWT.
 public class AuthService(
     IUserRepository users,
     IUnitOfWork unitOfWork,

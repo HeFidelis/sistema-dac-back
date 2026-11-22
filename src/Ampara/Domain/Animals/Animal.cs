@@ -8,10 +8,10 @@ public enum Sex { Female, Male }
 
 public enum AnimalSize { Small, Medium, Large }
 
-/// <summary>Available = shown in the public catalog. Adopted is only reached by approving an adoption.</summary>
+// Available = shown in the public catalog. Adopted is only reached by approving an adoption.
 public enum AnimalStatus { Available, InTreatment, Adopted }
 
-/// <summary>Data the team fills in when registering or editing an animal.</summary>
+// Data the team fills in when registering or editing an animal.
 public sealed record AnimalProfile(
     string Name,
     Species Species,
@@ -70,7 +70,7 @@ public class Animal : Entity
 
     public void SetPhoto(string url) => PhotoUrl = Guard.Required(url, "foto", PhotoUrlMaxLength);
 
-    /// <summary>Called when the NGO approves an adoption for this animal.</summary>
+    // Called when the NGO approves an adoption for this animal.
     public void MarkAsAdopted()
     {
         if (!IsAvailable)

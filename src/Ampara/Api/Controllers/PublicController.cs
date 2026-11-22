@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ampara.Api.Controllers;
 
-/// <summary>Adoption catalog for the public site: only animals available for adoption, no login needed.</summary>
+// Adoption catalog for the public site: only animals available for adoption, no login needed.
 [ApiController]
 [Route("api/public/animals")]
 public class PublicController(AnimalService animals) : ControllerBase

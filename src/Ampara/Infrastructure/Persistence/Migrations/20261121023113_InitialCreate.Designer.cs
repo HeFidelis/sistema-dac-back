@@ -15,7 +15,6 @@ namespace Ampara.Infrastructure.Persistence.Migrations
     [Migration("20261121023113_InitialCreate")]
     partial class InitialCreate
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

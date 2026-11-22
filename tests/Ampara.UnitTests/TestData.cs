@@ -4,7 +4,7 @@ using Ampara.Domain.Users;
 
 namespace Ampara.UnitTests;
 
-/// <summary>Builders shared by the tests, all pinned to the same fixed clock.</summary>
+// Builders shared by the tests, all pinned to the same fixed clock.
 public static class TestData
 {
     public static readonly DateTimeOffset Now = new(2026, 11, 20, 15, 0, 0, TimeSpan.Zero);

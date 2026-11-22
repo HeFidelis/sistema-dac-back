@@ -15,7 +15,7 @@ public sealed record SubmitAdoptionRequest
     [Required, MaxLength(AdoptionRequest.TextMaxLength)] public string Routine { get; init; } = string.Empty;
     [MaxLength(AdoptionRequest.TextMaxLength)] public string? Message { get; init; }
 
-    /// <summary>"Tenho 18 anos ou mais e concordo com a análise da ONG."</summary>
+    // "Tenho 18 anos ou mais e concordo com a análise da ONG."
     public bool AcceptsTerms { get; init; }
 }
 
@@ -50,7 +50,7 @@ public sealed record AdoptionResponse(
         new AdoptionApplicant(r.Adopter.Id, r.Adopter.FullName, r.Adopter.Email, r.Phone, r.Housing, r.Routine, r.Message));
 }
 
-/// <summary>The adopter applies; the NGO approves (animal becomes adopted) or rejects with a reason.</summary>
+// The adopter applies; the NGO approves (animal becomes adopted) or rejects with a reason.
 public class AdoptionService(
     IAdoptionRequestRepository requests,
     IAnimalRepository animals,
@@ -89,7 +89,7 @@ public class AdoptionService(
         return new PagedResult<AdoptionResponse>(items.Select(AdoptionResponse.From).ToList(), page, pageSize, total);
     }
 
-    /// <summary>The NGO sees any request; an adopter only their own.</summary>
+    // The NGO sees any request; an adopter only their own.
     public async Task<AdoptionResponse> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var adoption = await FindAsync(id, cancellationToken);

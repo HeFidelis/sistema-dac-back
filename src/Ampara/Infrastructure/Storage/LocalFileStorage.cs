@@ -3,10 +3,8 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Ampara.Infrastructure.Storage;
 
-/// <summary>
-/// Stores uploads on the API's disk and serves them under /uploads. Enough for the course project;
-/// a cloud deploy would swap this for blob storage behind the same interface.
-/// </summary>
+// Stores uploads on the API's disk and serves them under /uploads. Enough for the course project;
+// a cloud deploy would swap this for blob storage behind the same interface.
 public class LocalFileStorage(UploadsRoot root) : IFileStorage
 {
     public const string RequestPath = "/uploads";

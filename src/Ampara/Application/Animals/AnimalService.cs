@@ -52,7 +52,7 @@ public sealed record AnimalResponse(
         a.IsVaccinated, a.IsNeutered, a.IsDewormed, a.PhotoUrl, a.Status);
 }
 
-/// <summary>Animal registry for the team, plus the public catalog (available animals only).</summary>
+// Animal registry for the team, plus the public catalog (available animals only).
 public class AnimalService(IAnimalRepository animals, IUnitOfWork unitOfWork, IFileStorage storage, TimeProvider clock)
 {
     public const string PhotoFolder = "animals";
