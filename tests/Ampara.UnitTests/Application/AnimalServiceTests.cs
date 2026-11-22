@@ -2,6 +2,7 @@ using Ampara.Application.Animals;
 using Ampara.Application.Common;
 using Ampara.Domain.Animals;
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 using NSubstitute;
 using static Ampara.UnitTests.TestData;
 
@@ -18,12 +19,12 @@ public class AnimalServiceTests
 
     public AnimalServiceTests() => _service = new AnimalService(_animals, _unitOfWork, _storage, Clock());
 
-    private static AnimalRequest Request(string name = "Luna", AnimalStatus status = AnimalStatus.Available) => new()
+    private static AnimalRequest Request(string name = "Luna", AnimalStatusEnum status = AnimalStatusEnum.Available) => new()
     {
         Name = name,
-        Species = Species.Canine,
-        Sex = Sex.Female,
-        Size = AnimalSize.Medium,
+        Species = SpeciesEnum.Canine,
+        Sex = SexEnum.Female,
+        Size = AnimalSizeEnum.Medium,
         ApproximateAgeMonths = 24,
         IntakeDate = new DateOnly(2026, 11, 10),
         IsVaccinated = true,
@@ -35,7 +36,7 @@ public class AnimalServiceTests
     {
         var created = await _service.CreateAsync(Request());
 
-        _animals.Received(1).Add(Arg.Is<Animal>(a => a.Name == "Luna" && a.Status == AnimalStatus.Available));
+        _animals.Received(1).Add(Arg.Is<Animal>(a => a.Name == "Luna" && a.Status == AnimalStatusEnum.Available));
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
         Assert.Equal("Luna", created.Name);
     }
@@ -52,10 +53,10 @@ public class AnimalServiceTests
         var animal = NewAnimal();
         _animals.GetByIdAsync(animal.Id, Arg.Any<CancellationToken>()).Returns(animal);
 
-        var updated = await _service.UpdateAsync(animal.Id, Request("Luna Maria", AnimalStatus.InTreatment));
+        var updated = await _service.UpdateAsync(animal.Id, Request("Luna Maria", AnimalStatusEnum.InTreatment));
 
         Assert.Equal("Luna Maria", updated.Name);
-        Assert.Equal(AnimalStatus.InTreatment, updated.Status);
+        Assert.Equal(AnimalStatusEnum.InTreatment, updated.Status);
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 

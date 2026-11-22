@@ -3,6 +3,7 @@ using Ampara.Application.Common;
 using Ampara.Domain.Adoptions;
 using Ampara.Domain.Animals;
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 using NSubstitute;
 using static Ampara.UnitTests.TestData;
@@ -24,12 +25,12 @@ public class AdoptionServiceTests
     public AdoptionServiceTests()
     {
         _service = new AdoptionService(_requests, _animals, _users, _unitOfWork, _currentUser, Clock());
-        LogInAs(_adopter.Id, UserRole.Adopter);
+        LogInAs(_adopter.Id, UserRoleEnum.Adopter);
         _users.GetByIdAsync(_adopter.Id, Arg.Any<CancellationToken>()).Returns(_adopter);
         _animals.GetByIdAsync(_animal.Id, Arg.Any<CancellationToken>()).Returns(_animal);
     }
 
-    private void LogInAs(Guid userId, UserRole role)
+    private void LogInAs(Guid userId, UserRoleEnum role)
     {
         _currentUser.UserId.Returns(userId);
         _currentUser.Role.Returns(role);
@@ -54,7 +55,7 @@ public class AdoptionServiceTests
 
         _requests.Received(1).Add(Arg.Is<AdoptionRequest>(r => r.AdopterId == _adopter.Id && r.AnimalId == _animal.Id));
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
-        Assert.Equal(AdoptionStatus.Pending, response.Status);
+        Assert.Equal(AdoptionStatusEnum.Pending, response.Status);
         Assert.Equal("Ana Souza", response.Applicant.FullName);
     }
 
@@ -87,15 +88,15 @@ public class AdoptionServiceTests
     public async Task GetAsync_ByAnotherAdopter_ThrowsNotFound()
     {
         var request = Existing();
-        LogInAs(Guid.NewGuid(), UserRole.Adopter);
+        LogInAs(Guid.NewGuid(), UserRoleEnum.Adopter);
 
         await Assert.ThrowsAsync<NotFoundException>(() => _service.GetAsync(request.Id));
     }
 
     [Theory]
-    [InlineData(UserRole.Admin)]
-    [InlineData(UserRole.SuperAdmin)]
-    public async Task GetAsync_ByTheTeam_ReturnsAnyRequest(UserRole role)
+    [InlineData(UserRoleEnum.Admin)]
+    [InlineData(UserRoleEnum.SuperAdmin)]
+    public async Task GetAsync_ByTheTeam_ReturnsAnyRequest(UserRoleEnum role)
     {
         var request = Existing();
         LogInAs(Guid.NewGuid(), role);
@@ -112,8 +113,8 @@ public class AdoptionServiceTests
 
         var response = await _service.ApproveAsync(request.Id);
 
-        Assert.Equal(AdoptionStatus.Approved, response.Status);
-        Assert.Equal(AnimalStatus.Adopted, _animal.Status);
+        Assert.Equal(AdoptionStatusEnum.Approved, response.Status);
+        Assert.Equal(AnimalStatusEnum.Adopted, _animal.Status);
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
@@ -124,7 +125,7 @@ public class AdoptionServiceTests
 
         var response = await _service.RejectAsync(request.Id, new RejectAdoptionRequest { Reason = "Moradia sem telas." });
 
-        Assert.Equal(AdoptionStatus.Rejected, response.Status);
+        Assert.Equal(AdoptionStatusEnum.Rejected, response.Status);
         Assert.Equal("Moradia sem telas.", response.RejectionReason);
     }
 

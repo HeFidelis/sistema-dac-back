@@ -1,4 +1,5 @@
 using Ampara.Application.Common;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 using Ampara.Infrastructure.Security;
 
@@ -9,6 +10,6 @@ public class CurrentUser(IHttpContextAccessor accessor) : ICurrentUser
     public Guid? UserId =>
         Guid.TryParse(accessor.HttpContext?.User.FindFirst(JwtClaims.Subject)?.Value, out var id) ? id : null;
 
-    public UserRole? Role =>
-        Enum.TryParse<UserRole>(accessor.HttpContext?.User.FindFirst(JwtClaims.Role)?.Value, out var role) ? role : null;
+    public UserRoleEnum? Role =>
+        Enum.TryParse<UserRoleEnum>(accessor.HttpContext?.User.FindFirst(JwtClaims.Role)?.Value, out var role) ? role : null;
 }

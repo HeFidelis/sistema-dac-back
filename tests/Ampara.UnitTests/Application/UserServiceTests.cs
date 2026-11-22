@@ -1,6 +1,7 @@
 using Ampara.Application.Common;
 using Ampara.Application.Users;
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 using NSubstitute;
 using static Ampara.UnitTests.TestData;
@@ -21,9 +22,9 @@ public class UserServiceTests
         var user = NewAdopter();
         _users.GetByIdAsync(user.Id, Arg.Any<CancellationToken>()).Returns(user);
 
-        var response = await _service.ChangeRoleAsync(user.Id, new ChangeRoleRequest { Role = UserRole.Admin });
+        var response = await _service.ChangeRoleAsync(user.Id, new ChangeRoleRequest { Role = UserRoleEnum.Admin });
 
-        Assert.Equal(UserRole.Admin, response.Role);
+        Assert.Equal(UserRoleEnum.Admin, response.Role);
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
@@ -31,7 +32,7 @@ public class UserServiceTests
     public async Task ChangeRoleAsync_ForMissingUser_ThrowsNotFound()
     {
         await Assert.ThrowsAsync<NotFoundException>(() =>
-            _service.ChangeRoleAsync(Guid.NewGuid(), new ChangeRoleRequest { Role = UserRole.Admin }));
+            _service.ChangeRoleAsync(Guid.NewGuid(), new ChangeRoleRequest { Role = UserRoleEnum.Admin }));
     }
 
     [Fact]
@@ -41,7 +42,7 @@ public class UserServiceTests
         _users.GetByIdAsync(user.Id, Arg.Any<CancellationToken>()).Returns(user);
 
         await Assert.ThrowsAsync<DomainException>(() =>
-            _service.ChangeRoleAsync(user.Id, new ChangeRoleRequest { Role = UserRole.SuperAdmin }));
+            _service.ChangeRoleAsync(user.Id, new ChangeRoleRequest { Role = UserRoleEnum.SuperAdmin }));
         await _unitOfWork.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 

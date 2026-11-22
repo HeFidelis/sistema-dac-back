@@ -1,5 +1,6 @@
 using Ampara.Application.Animals;
 using Ampara.Domain.Animals;
+using Ampara.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ampara.Api.Controllers;
@@ -10,7 +11,7 @@ namespace Ampara.Api.Controllers;
 public class PublicController(AnimalService animals) : ControllerBase
 {
     [HttpGet]
-    public Task<IReadOnlyList<AnimalResponse>> List([FromQuery] Species? species, CancellationToken cancellationToken) =>
+    public Task<IReadOnlyList<AnimalResponse>> List([FromQuery] SpeciesEnum? species, CancellationToken cancellationToken) =>
         animals.ListAvailableAsync(species, cancellationToken);
 
     [HttpGet("{id:guid}")]

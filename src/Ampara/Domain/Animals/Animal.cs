@@ -1,22 +1,14 @@
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 
 namespace Ampara.Domain.Animals;
-
-public enum Species { Canine, Feline, Other }
-
-public enum Sex { Female, Male }
-
-public enum AnimalSize { Small, Medium, Large }
-
-// Available = shown in the public catalog. Adopted is only reached by approving an adoption.
-public enum AnimalStatus { Available, InTreatment, Adopted }
 
 // Data the team fills in when registering or editing an animal.
 public sealed record AnimalProfile(
     string Name,
-    Species Species,
-    Sex Sex,
-    AnimalSize Size,
+    SpeciesEnum Species,
+    SexEnum Sex,
+    AnimalSizeEnum Size,
     int ApproximateAgeMonths,
     DateOnly IntakeDate,
     string? Description,
@@ -32,9 +24,9 @@ public class Animal : Entity
     public const int MaxAgeMonths = 360;
 
     public string Name { get; private set; } = string.Empty;
-    public Species Species { get; private set; }
-    public Sex Sex { get; private set; }
-    public AnimalSize Size { get; private set; }
+    public SpeciesEnum Species { get; private set; }
+    public SexEnum Sex { get; private set; }
+    public AnimalSizeEnum Size { get; private set; }
     public int ApproximateAgeMonths { get; private set; }
     public DateOnly IntakeDate { get; private set; }
     public string? Description { get; private set; }
@@ -42,16 +34,16 @@ public class Animal : Entity
     public bool IsNeutered { get; private set; }
     public bool IsDewormed { get; private set; }
     public string? PhotoUrl { get; private set; }
-    public AnimalStatus Status { get; private set; }
+    public AnimalStatusEnum Status { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
 
-    public bool IsAvailable => Status == AnimalStatus.Available;
+    public bool IsAvailable => Status == AnimalStatusEnum.Available;
 
     private Animal() { }
 
-    public static Animal Register(AnimalProfile profile, AnimalStatus status, DateTimeOffset now)
+    public static Animal Register(AnimalProfile profile, AnimalStatusEnum status, DateTimeOffset now)
     {
-        if (status == AnimalStatus.Adopted)
+        if (status == AnimalStatusEnum.Adopted)
             throw new DomainException("Um animal só fica como adotado quando uma adoção é aprovada.");
 
         var animal = new Animal { Status = status, CreatedAt = now };
@@ -59,9 +51,9 @@ public class Animal : Entity
         return animal;
     }
 
-    public void Update(AnimalProfile profile, AnimalStatus status, DateTimeOffset now)
+    public void Update(AnimalProfile profile, AnimalStatusEnum status, DateTimeOffset now)
     {
-        if (status != Status && (status == AnimalStatus.Adopted || Status == AnimalStatus.Adopted))
+        if (status != Status && (status == AnimalStatusEnum.Adopted || Status == AnimalStatusEnum.Adopted))
             throw new DomainException("A situação de adotado só muda pela aprovação de uma adoção.");
 
         Apply(profile, now);
@@ -76,7 +68,7 @@ public class Animal : Entity
         if (!IsAvailable)
             throw new DomainException("Este animal não está disponível para adoção no momento.");
 
-        Status = AnimalStatus.Adopted;
+        Status = AnimalStatusEnum.Adopted;
     }
 
     private void Apply(AnimalProfile profile, DateTimeOffset now)

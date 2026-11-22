@@ -1,4 +1,5 @@
 using Ampara.Domain.Animals;
+using Ampara.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ampara.Infrastructure.Persistence;
@@ -30,9 +31,9 @@ public class AnimalRepository(AppDbContext db) : IAnimalRepository
         return (items, total);
     }
 
-    public async Task<IReadOnlyList<Animal>> ListAvailableAsync(Species? species, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Animal>> ListAvailableAsync(SpeciesEnum? species, CancellationToken cancellationToken = default)
     {
-        var query = db.Animals.AsNoTracking().Where(a => a.Status == AnimalStatus.Available);
+        var query = db.Animals.AsNoTracking().Where(a => a.Status == AnimalStatusEnum.Available);
 
         if (species is { } value)
             query = query.Where(a => a.Species == value);
@@ -40,7 +41,7 @@ public class AnimalRepository(AppDbContext db) : IAnimalRepository
         return await query.OrderByDescending(a => a.IntakeDate).ThenBy(a => a.Name).ToListAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyDictionary<AnimalStatus, int>> CountByStatusAsync(CancellationToken cancellationToken = default) =>
+    public async Task<IReadOnlyDictionary<AnimalStatusEnum, int>> CountByStatusAsync(CancellationToken cancellationToken = default) =>
         await db.Animals
             .GroupBy(a => a.Status)
             .Select(g => new { Status = g.Key, Count = g.Count() })

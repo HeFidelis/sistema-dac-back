@@ -1,5 +1,6 @@
 using Ampara.Domain.Adoptions;
 using Ampara.Domain.Animals;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 
 namespace Ampara.UnitTests;
@@ -12,13 +13,13 @@ public static class TestData
     public static TimeProvider Clock() => new FixedClock(Now);
 
     public static AnimalProfile Profile(string name = "Luna", int ageMonths = 24, DateOnly? intakeDate = null) =>
-        new(name, Species.Canine, Sex.Female, AnimalSize.Medium, ageMonths, intakeDate ?? new DateOnly(2026, 11, 10),
+        new(name, SpeciesEnum.Canine, SexEnum.Female, AnimalSizeEnum.Medium, ageMonths, intakeDate ?? new DateOnly(2026, 11, 10),
             "Carinhosa e companheira.", true, true, false);
 
-    public static Animal NewAnimal(AnimalStatus status = AnimalStatus.Available) => Animal.Register(Profile(), status, Now);
+    public static Animal NewAnimal(AnimalStatusEnum status = AnimalStatusEnum.Available) => Animal.Register(Profile(), status, Now);
 
     public static User NewAdopter(string email = "ana@exemplo.com") =>
-        User.Register("Ana Souza", email, "(11) 99999-0123", UserRole.Adopter, "hash", Now);
+        User.Register("Ana Souza", email, "(11) 99999-0123", UserRoleEnum.Adopter, "hash", Now);
 
     public static ApplicantDetails Details() =>
         new("(11) 99999-0123", "Apartamento próprio, com telas.", "Trabalho híbrido.", "Quero dar um lar.");

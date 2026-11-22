@@ -1,4 +1,5 @@
 using Ampara.Domain.Adoptions;
+using Ampara.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ampara.Infrastructure.Persistence;
@@ -11,7 +12,7 @@ public class AdoptionRequestRepository(AppDbContext db) : IAdoptionRequestReposi
         WithDetails.FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
     public async Task<(IReadOnlyList<AdoptionRequest> Items, int TotalCount)> ListAsync(
-        AdoptionStatus? status, int page, int pageSize, CancellationToken cancellationToken = default)
+        AdoptionStatusEnum? status, int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var query = WithDetails.AsNoTracking();
 
@@ -35,14 +36,14 @@ public class AdoptionRequestRepository(AppDbContext db) : IAdoptionRequestReposi
 
     public Task<bool> HasPendingAsync(Guid adopterId, Guid animalId, CancellationToken cancellationToken = default) =>
         db.AdoptionRequests.AnyAsync(
-            r => r.AdopterId == adopterId && r.AnimalId == animalId && r.Status == AdoptionStatus.Pending, cancellationToken);
+            r => r.AdopterId == adopterId && r.AnimalId == animalId && r.Status == AdoptionStatusEnum.Pending, cancellationToken);
 
     public Task<int> CountPendingAsync(CancellationToken cancellationToken = default) =>
-        db.AdoptionRequests.CountAsync(r => r.Status == AdoptionStatus.Pending, cancellationToken);
+        db.AdoptionRequests.CountAsync(r => r.Status == AdoptionStatusEnum.Pending, cancellationToken);
 
     public async Task<IReadOnlyList<DateTimeOffset>> ListApprovalDatesSinceAsync(DateTimeOffset since, CancellationToken cancellationToken = default) =>
         await db.AdoptionRequests
-            .Where(r => r.Status == AdoptionStatus.Approved && r.DecidedAt >= since)
+            .Where(r => r.Status == AdoptionStatusEnum.Approved && r.DecidedAt >= since)
             .Select(r => r.DecidedAt!.Value)
             .ToListAsync(cancellationToken);
 

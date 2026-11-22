@@ -1,5 +1,6 @@
 using Ampara.Domain.Adoptions;
 using Ampara.Domain.Animals;
+using Ampara.Domain.Enums;
 
 namespace Ampara.Application.Dashboard;
 
@@ -38,13 +39,13 @@ public class DashboardService(IAnimalRepository animals, IAdoptionRequestReposit
                 approvals.Count(d => d.Year == month.Year && d.Month == month.Month)))
             .ToList();
 
-        int Count(AnimalStatus status) => byStatus.TryGetValue(status, out var count) ? count : 0;
+        int Count(AnimalStatusEnum status) => byStatus.TryGetValue(status, out var count) ? count : 0;
 
         return new DashboardResponse(
             byStatus.Values.Sum(),
-            Count(AnimalStatus.Available),
-            Count(AnimalStatus.InTreatment),
-            Count(AnimalStatus.Adopted),
+            Count(AnimalStatusEnum.Available),
+            Count(AnimalStatusEnum.InTreatment),
+            Count(AnimalStatusEnum.Adopted),
             pending,
             lastSixMonths);
     }

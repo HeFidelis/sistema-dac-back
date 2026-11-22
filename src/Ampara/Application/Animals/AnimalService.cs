@@ -1,3 +1,4 @@
+using Ampara.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using Ampara.Application.Common;
 using Ampara.Domain.Animals;
@@ -8,16 +9,16 @@ namespace Ampara.Application.Animals;
 public sealed record AnimalRequest
 {
     [Required, MaxLength(Animal.NameMaxLength)] public string Name { get; init; } = string.Empty;
-    public Species Species { get; init; }
-    public Sex Sex { get; init; }
-    public AnimalSize Size { get; init; }
+    public SpeciesEnum Species { get; init; }
+    public SexEnum Sex { get; init; }
+    public AnimalSizeEnum Size { get; init; }
     [Range(0, Animal.MaxAgeMonths)] public int ApproximateAgeMonths { get; init; }
     public DateOnly IntakeDate { get; init; }
     [MaxLength(Animal.DescriptionMaxLength)] public string? Description { get; init; }
     public bool IsVaccinated { get; init; }
     public bool IsNeutered { get; init; }
     public bool IsDewormed { get; init; }
-    public AnimalStatus Status { get; init; } = AnimalStatus.Available;
+    public AnimalStatusEnum Status { get; init; } = AnimalStatusEnum.Available;
 
     public AnimalProfile ToProfile() => new(
         Name, Species, Sex, Size, ApproximateAgeMonths, IntakeDate, Description, IsVaccinated, IsNeutered, IsDewormed);
@@ -26,8 +27,8 @@ public sealed record AnimalRequest
 public sealed record AnimalListQuery
 {
     public string? Search { get; init; }
-    public Species? Species { get; init; }
-    public AnimalStatus? Status { get; init; }
+    public SpeciesEnum? Species { get; init; }
+    public AnimalStatusEnum? Status { get; init; }
     public int? Page { get; init; }
     public int? PageSize { get; init; }
 }
@@ -35,9 +36,9 @@ public sealed record AnimalListQuery
 public sealed record AnimalResponse(
     Guid Id,
     string Name,
-    Species Species,
-    Sex Sex,
-    AnimalSize Size,
+    SpeciesEnum Species,
+    SexEnum Sex,
+    AnimalSizeEnum Size,
     int ApproximateAgeMonths,
     DateOnly IntakeDate,
     string? Description,
@@ -45,7 +46,7 @@ public sealed record AnimalResponse(
     bool IsNeutered,
     bool IsDewormed,
     string? PhotoUrl,
-    AnimalStatus Status)
+    AnimalStatusEnum Status)
 {
     public static AnimalResponse From(Animal a) => new(
         a.Id, a.Name, a.Species, a.Sex, a.Size, a.ApproximateAgeMonths, a.IntakeDate, a.Description,
@@ -111,7 +112,7 @@ public class AnimalService(IAnimalRepository animals, IUnitOfWork unitOfWork, IF
         return AnimalResponse.From(animal);
     }
 
-    public async Task<IReadOnlyList<AnimalResponse>> ListAvailableAsync(Species? species, CancellationToken cancellationToken = default) =>
+    public async Task<IReadOnlyList<AnimalResponse>> ListAvailableAsync(SpeciesEnum? species, CancellationToken cancellationToken = default) =>
         (await animals.ListAvailableAsync(species, cancellationToken)).Select(AnimalResponse.From).ToList();
 
     public async Task<AnimalResponse> GetAvailableAsync(Guid id, CancellationToken cancellationToken = default)

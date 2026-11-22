@@ -1,3 +1,4 @@
+using Ampara.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using Ampara.Application.Common;
 using Ampara.Domain.Adoptions;
@@ -26,18 +27,18 @@ public sealed record RejectAdoptionRequest
 
 public sealed record AdoptionListQuery
 {
-    public AdoptionStatus? Status { get; init; }
+    public AdoptionStatusEnum? Status { get; init; }
     public int? Page { get; init; }
     public int? PageSize { get; init; }
 }
 
-public sealed record AdoptionAnimal(Guid Id, string Name, Species Species, Sex Sex, AnimalSize Size, int ApproximateAgeMonths, string? PhotoUrl);
+public sealed record AdoptionAnimal(Guid Id, string Name, SpeciesEnum Species, SexEnum Sex, AnimalSizeEnum Size, int ApproximateAgeMonths, string? PhotoUrl);
 
 public sealed record AdoptionApplicant(Guid Id, string FullName, string Email, string Phone, string Housing, string Routine, string? Message);
 
 public sealed record AdoptionResponse(
     Guid Id,
-    AdoptionStatus Status,
+    AdoptionStatusEnum Status,
     DateTimeOffset CreatedAt,
     DateTimeOffset? DecidedAt,
     string? RejectionReason,

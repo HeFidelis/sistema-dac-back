@@ -1,6 +1,7 @@
 using Ampara.Domain.Adoptions;
 using Ampara.Domain.Animals;
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 using static Ampara.UnitTests.TestData;
 
 namespace Ampara.UnitTests.Domain;
@@ -15,7 +16,7 @@ public class AdoptionRequestTests
 
         var request = AdoptionRequest.Submit(animal, adopter, Details(), acceptsTerms: true, Now);
 
-        Assert.Equal(AdoptionStatus.Pending, request.Status);
+        Assert.Equal(AdoptionStatusEnum.Pending, request.Status);
         Assert.Equal(animal.Id, request.AnimalId);
         Assert.Equal(adopter.Id, request.AdopterId);
         Assert.Equal(Now, request.CreatedAt);
@@ -26,7 +27,7 @@ public class AdoptionRequestTests
     public void Submit_ForAnimalInTreatment_Throws()
     {
         Assert.Throws<DomainException>(() =>
-            AdoptionRequest.Submit(NewAnimal(AnimalStatus.InTreatment), NewAdopter(), Details(), acceptsTerms: true, Now));
+            AdoptionRequest.Submit(NewAnimal(AnimalStatusEnum.InTreatment), NewAdopter(), Details(), acceptsTerms: true, Now));
     }
 
     [Fact]
@@ -55,9 +56,9 @@ public class AdoptionRequestTests
 
         request.Approve(Now.AddDays(1));
 
-        Assert.Equal(AdoptionStatus.Approved, request.Status);
+        Assert.Equal(AdoptionStatusEnum.Approved, request.Status);
         Assert.Equal(Now.AddDays(1), request.DecidedAt);
-        Assert.Equal(AnimalStatus.Adopted, animal.Status);
+        Assert.Equal(AnimalStatusEnum.Adopted, animal.Status);
     }
 
     [Fact]
@@ -69,7 +70,7 @@ public class AdoptionRequestTests
         first.Approve(Now);
 
         Assert.Throws<DomainException>(() => second.Approve(Now));
-        Assert.Equal(AdoptionStatus.Pending, second.Status);
+        Assert.Equal(AdoptionStatusEnum.Pending, second.Status);
     }
 
     [Fact]
@@ -80,7 +81,7 @@ public class AdoptionRequestTests
 
         request.Reject("  Rotina incompatível com um cão de porte médio.  ", Now);
 
-        Assert.Equal(AdoptionStatus.Rejected, request.Status);
+        Assert.Equal(AdoptionStatusEnum.Rejected, request.Status);
         Assert.Equal("Rotina incompatível com um cão de porte médio.", request.RejectionReason);
         Assert.True(animal.IsAvailable);
     }

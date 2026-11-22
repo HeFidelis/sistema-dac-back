@@ -1,6 +1,7 @@
 using Ampara.Application.Auth;
 using Ampara.Application.Common;
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 using NSubstitute;
 using static Ampara.UnitTests.TestData;
@@ -31,10 +32,10 @@ public class AuthServiceTests
             FullName = "Ana Souza", Email = " Ana@Exemplo.com ", Password = "segura123",
         });
 
-        _users.Received(1).Add(Arg.Is<User>(u => u.Email == "ana@exemplo.com" && u.Role == UserRole.Adopter && u.PasswordHash == "hashed"));
+        _users.Received(1).Add(Arg.Is<User>(u => u.Email == "ana@exemplo.com" && u.Role == UserRoleEnum.Adopter && u.PasswordHash == "hashed"));
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
         Assert.Equal("jwt", response.AccessToken);
-        Assert.Equal(UserRole.Adopter, response.User.Role);
+        Assert.Equal(UserRoleEnum.Adopter, response.User.Role);
     }
 
     [Fact]

@@ -1,16 +1,7 @@
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 
 namespace Ampara.Domain.Users;
-
-// SuperAdmin: the NGO owner (only one, from the seed), who also manages the team.
-// Admin: promoted by the SuperAdmin; runs animals, adoptions and the dashboard.
-// Adopter: anyone who signs up.
-public enum UserRole
-{
-    Admin,
-    Adopter,
-    SuperAdmin,
-}
 
 public class User : Entity
 {
@@ -21,14 +12,14 @@ public class User : Entity
     public string FullName { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
     public string? Phone { get; private set; }
-    public UserRole Role { get; private set; }
+    public UserRoleEnum Role { get; private set; }
     public string PasswordHash { get; private set; } = string.Empty;
     public DateTimeOffset CreatedAt { get; private set; }
 
     private User() { }
 
     // passwordHash: Already hashed; the plain password never reaches the domain.
-    public static User Register(string fullName, string email, string? phone, UserRole role, string passwordHash, DateTimeOffset now)
+    public static User Register(string fullName, string email, string? phone, UserRoleEnum role, string passwordHash, DateTimeOffset now)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash);
 
@@ -44,12 +35,12 @@ public class User : Entity
     }
 
     // Promotes an adopter to the team (Admin) or moves an Admin back to adopter.
-    public void ChangeRole(UserRole role)
+    public void ChangeRole(UserRoleEnum role)
     {
-        if (role == UserRole.SuperAdmin)
+        if (role == UserRoleEnum.SuperAdmin)
             throw new DomainException("Não é possível promover alguém a super admin.");
 
-        if (Role == UserRole.SuperAdmin)
+        if (Role == UserRoleEnum.SuperAdmin)
             throw new DomainException("O papel do super admin não pode ser alterado.");
 
         Role = role;

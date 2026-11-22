@@ -1,6 +1,7 @@
 using Ampara.Application.Auth;
 using Ampara.Application.Common;
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 
 namespace Ampara.Application.Users;
@@ -14,7 +15,7 @@ public sealed record UserListQuery
 
 public sealed record ChangeRoleRequest
 {
-    public UserRole Role { get; init; }
+    public UserRoleEnum Role { get; init; }
 }
 
 // The SuperAdmin's "Equipe" tab: finds people and promotes or demotes them.

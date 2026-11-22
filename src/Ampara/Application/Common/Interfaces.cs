@@ -1,3 +1,4 @@
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 
 namespace Ampara.Application.Common;
@@ -6,7 +7,7 @@ namespace Ampara.Application.Common;
 public interface ICurrentUser
 {
     Guid? UserId { get; }
-    UserRole? Role { get; }
+    UserRoleEnum? Role { get; }
 }
 
 public static class CurrentUserExtensions
@@ -15,7 +16,7 @@ public static class CurrentUserExtensions
         user.UserId ?? throw new UnauthorizedException("Faça login para continuar.");
 
     // Admin or SuperAdmin.
-    public static bool IsStaff(this ICurrentUser user) => user.Role is UserRole.Admin or UserRole.SuperAdmin;
+    public static bool IsStaff(this ICurrentUser user) => user.Role is UserRoleEnum.Admin or UserRoleEnum.SuperAdmin;
 }
 
 public interface IPasswordHasher

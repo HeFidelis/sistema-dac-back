@@ -1,3 +1,4 @@
+using Ampara.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using Ampara.Application.Common;
 using Ampara.Domain.Common;
@@ -19,7 +20,7 @@ public sealed record LoginRequest
     [Required] public string Password { get; init; } = string.Empty;
 }
 
-public sealed record UserResponse(Guid Id, string FullName, string Email, string? Phone, UserRole Role)
+public sealed record UserResponse(Guid Id, string FullName, string Email, string? Phone, UserRoleEnum Role)
 {
     public static UserResponse From(User user) => new(user.Id, user.FullName, user.Email, user.Phone, user.Role);
 }
@@ -46,7 +47,7 @@ public class AuthService(
         if (await users.EmailExistsAsync(email, cancellationToken))
             throw new ConflictException("Já existe uma conta com este e-mail.");
 
-        var user = User.Register(request.FullName, email, request.Phone, UserRole.Adopter,
+        var user = User.Register(request.FullName, email, request.Phone, UserRoleEnum.Adopter,
             passwordHasher.Hash(request.Password), clock.GetUtcNow());
 
         users.Add(user);

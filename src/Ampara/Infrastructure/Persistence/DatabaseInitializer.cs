@@ -1,6 +1,7 @@
 using Ampara.Application.Common;
 using Ampara.Domain.Adoptions;
 using Ampara.Domain.Animals;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,21 +44,21 @@ public static class DatabaseInitializer
     private static async Task SeedAsync(AppDbContext db, IPasswordHasher hasher, string password, DateTimeOffset now)
     {
         var hash = hasher.Hash(password);
-        var admin = User.Register("Mariana Costa", "admin@ampara.local", null, UserRole.SuperAdmin, hash, now.AddDays(-150));
-        var adopter = User.Register("Ana Souza", "adotante@ampara.local", "(11) 99999-0123", UserRole.Adopter, hash, now.AddDays(-150));
+        var admin = User.Register("Mariana Costa", "admin@ampara.local", null, UserRoleEnum.SuperAdmin, hash, now.AddDays(-150));
+        var adopter = User.Register("Ana Souza", "adotante@ampara.local", "(11) 99999-0123", UserRoleEnum.Adopter, hash, now.AddDays(-150));
         db.Users.AddRange(admin, adopter);
 
         var today = DateOnly.FromDateTime(now.UtcDateTime);
-        Animal Register(string name, Species species, Sex sex, AnimalSize size, int ageMonths, int daysAgo, string description, AnimalStatus status = AnimalStatus.Available) =>
+        Animal Register(string name, SpeciesEnum species, SexEnum sex, AnimalSizeEnum size, int ageMonths, int daysAgo, string description, AnimalStatusEnum status = AnimalStatusEnum.Available) =>
             Animal.Register(new AnimalProfile(name, species, sex, size, ageMonths, today.AddDays(-daysAgo), description, true, true, true), status, now.AddDays(-daysAgo));
 
-        var luna = Register("Luna", Species.Canine, Sex.Female, AnimalSize.Medium, 24, 10, "Carinhosa e companheira. Adora passeios tranquilos.");
-        var chico = Register("Chico", Species.Canine, Sex.Male, AnimalSize.Medium, 36, 20, "Brincalhão e cheio de energia.");
-        var mel = Register("Mel", Species.Feline, Sex.Female, AnimalSize.Small, 18, 35, "Tranquila e curiosa, gosta de colo.");
-        var thor = Register("Thor", Species.Canine, Sex.Male, AnimalSize.Large, 48, 40, "Grande e dócil, em tratamento de pele.", AnimalStatus.InTreatment);
-        var nina = Register("Nina", Species.Feline, Sex.Female, AnimalSize.Small, 12, 45, "Curiosa e tranquila, adora janelas.");
-        var bento = Register("Bento", Species.Canine, Sex.Male, AnimalSize.Small, 60, 95, "Calmo e companheiro.");
-        var pipoca = Register("Pipoca", Species.Feline, Sex.Male, AnimalSize.Small, 8, 140, "Agitado e muito carinhoso.");
+        var luna = Register("Luna", SpeciesEnum.Canine, SexEnum.Female, AnimalSizeEnum.Medium, 24, 10, "Carinhosa e companheira. Adora passeios tranquilos.");
+        var chico = Register("Chico", SpeciesEnum.Canine, SexEnum.Male, AnimalSizeEnum.Medium, 36, 20, "Brincalhão e cheio de energia.");
+        var mel = Register("Mel", SpeciesEnum.Feline, SexEnum.Female, AnimalSizeEnum.Small, 18, 35, "Tranquila e curiosa, gosta de colo.");
+        var thor = Register("Thor", SpeciesEnum.Canine, SexEnum.Male, AnimalSizeEnum.Large, 48, 40, "Grande e dócil, em tratamento de pele.", AnimalStatusEnum.InTreatment);
+        var nina = Register("Nina", SpeciesEnum.Feline, SexEnum.Female, AnimalSizeEnum.Small, 12, 45, "Curiosa e tranquila, adora janelas.");
+        var bento = Register("Bento", SpeciesEnum.Canine, SexEnum.Male, AnimalSizeEnum.Small, 60, 95, "Calmo e companheiro.");
+        var pipoca = Register("Pipoca", SpeciesEnum.Feline, SexEnum.Male, AnimalSizeEnum.Small, 8, 140, "Agitado e muito carinhoso.");
         db.Animals.AddRange(luna, chico, mel, thor, nina, bento, pipoca);
 
         var details = new ApplicantDetails(

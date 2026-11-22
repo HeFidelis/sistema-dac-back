@@ -1,6 +1,7 @@
 using Ampara.Application.Dashboard;
 using Ampara.Domain.Adoptions;
 using Ampara.Domain.Animals;
+using Ampara.Domain.Enums;
 using NSubstitute;
 using static Ampara.UnitTests.TestData;
 
@@ -16,7 +17,7 @@ public class DashboardServiceTests
     {
         _service = new DashboardService(_animals, _requests, Clock());
         _animals.CountByStatusAsync(Arg.Any<CancellationToken>())
-            .Returns(new Dictionary<AnimalStatus, int> { [AnimalStatus.Available] = 3, [AnimalStatus.Adopted] = 2 });
+            .Returns(new Dictionary<AnimalStatusEnum, int> { [AnimalStatusEnum.Available] = 3, [AnimalStatusEnum.Adopted] = 2 });
         _animals.ListIntakeDatesSinceAsync(Arg.Any<DateOnly>(), Arg.Any<CancellationToken>()).Returns([]);
         _requests.ListApprovalDatesSinceAsync(Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>()).Returns([]);
         _requests.CountPendingAsync(Arg.Any<CancellationToken>()).Returns(4);

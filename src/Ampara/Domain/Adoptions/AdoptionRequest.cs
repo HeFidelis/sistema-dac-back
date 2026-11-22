@@ -1,10 +1,9 @@
 using Ampara.Domain.Animals;
 using Ampara.Domain.Common;
+using Ampara.Domain.Enums;
 using Ampara.Domain.Users;
 
 namespace Ampara.Domain.Adoptions;
-
-public enum AdoptionStatus { Pending, Approved, Rejected }
 
 // What the adopter tells the NGO in the adoption form.
 public sealed record ApplicantDetails(string Phone, string Housing, string Routine, string? Message);
@@ -23,7 +22,7 @@ public class AdoptionRequest : Entity
     public string Housing { get; private set; } = string.Empty;
     public string Routine { get; private set; } = string.Empty;
     public string? Message { get; private set; }
-    public AdoptionStatus Status { get; private set; }
+    public AdoptionStatusEnum Status { get; private set; }
     public string? RejectionReason { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset? DecidedAt { get; private set; }
@@ -48,7 +47,7 @@ public class AdoptionRequest : Entity
             Housing = Guard.Required(details.Housing, "moradia", TextMaxLength),
             Routine = Guard.Required(details.Routine, "rotina", TextMaxLength),
             Message = Guard.Optional(details.Message, "mensagem", TextMaxLength),
-            Status = AdoptionStatus.Pending,
+            Status = AdoptionStatusEnum.Pending,
             CreatedAt = now,
         };
     }
@@ -58,7 +57,7 @@ public class AdoptionRequest : Entity
     {
         EnsurePending();
         Animal.MarkAsAdopted();
-        Status = AdoptionStatus.Approved;
+        Status = AdoptionStatusEnum.Approved;
         DecidedAt = now;
     }
 
@@ -66,13 +65,13 @@ public class AdoptionRequest : Entity
     {
         EnsurePending();
         RejectionReason = Guard.Required(reason, "motivo", ReasonMaxLength);
-        Status = AdoptionStatus.Rejected;
+        Status = AdoptionStatusEnum.Rejected;
         DecidedAt = now;
     }
 
     private void EnsurePending()
     {
-        if (Status != AdoptionStatus.Pending)
+        if (Status != AdoptionStatusEnum.Pending)
             throw new DomainException("Esta solicitação já foi decidida.");
     }
 }
