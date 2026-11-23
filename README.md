@@ -20,7 +20,7 @@ dotnet user-secrets set "Jwt:Key" 'uma-chave-aleatoria-com-pelo-menos-32-caracte
 dotnet run --project src/Ampara --launch-profile http
 ```
 
-Em desenvolvimento, a API cria o banco, aplica a migration e insere dados de demonstração ao iniciar. O Swagger fica em http://localhost:5154/swagger (botão *Authorize* para colar o token).
+Em desenvolvimento, a API cria o banco, aplica as migrations do EF Core e insere dados de demonstração ao iniciar. As migrations ficam com quem cuida do banco, em `src/Ampara/Infrastructure/Persistence/Migrations/`: sem elas, a API sobe, mas sem tabelas. O Swagger fica em http://localhost:5154/swagger (botão *Authorize* para colar o token).
 
 ### Usuários de demonstração
 
@@ -158,7 +158,7 @@ Projeto único em camadas (Clean Architecture + DDD simplificado). As dependênc
 src/Ampara/
 ├── Domain/           # entidades e regras (User, Animal, AdoptionRequest), contratos dos repositórios e Enums/
 ├── Application/      # casos de uso (services) e contratos (DTOs) por feature
-├── Infrastructure/   # EF Core/PostgreSQL (repositórios, migration, seed), JWT, hash de senha, fotos
+├── Infrastructure/   # EF Core/PostgreSQL (repositórios, migrations, seed), JWT, hash de senha, fotos
 ├── Api/              # controllers, tratamento de erros, usuário atual
 └── Program.cs
 tests/Ampara.UnitTests/
